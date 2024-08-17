@@ -6,7 +6,7 @@
 //  Copyright © 2020 BorisEmorine. All rights reserved.
 //
 
-import UIKit
+import AppKit
 
 struct Lab {
     let L: CGFloat
@@ -46,7 +46,7 @@ struct LabCalculator {
     }
 }
 
-extension UIColor {
+extension NSColor {
     
     /// The L* value of the CIELAB color space.
     /// L* represents the lightness of the color from 0 (black) to 100 (white).

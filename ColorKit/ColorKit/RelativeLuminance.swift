@@ -6,9 +6,9 @@
 //  Copyright © 2020 BorisEmorine. All rights reserved.
 //
 
-import UIKit
+import AppKit
 
-extension UIColor {
+extension NSColor {
     
     /// Computes the relative luminance of the color.
     /// This assume that the color is using the sRGB color space.

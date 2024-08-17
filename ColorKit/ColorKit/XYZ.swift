@@ -6,7 +6,7 @@
 //  Copyright © 2020 BorisEmorine. All rights reserved.
 //
 
-import UIKit
+import AppKit
 
 struct XYZ {
     let X: CGFloat
@@ -38,7 +38,7 @@ struct XYZCalculator {
     
 }
 
-extension UIColor {
+extension NSColor {
     
     /// The X value of the XYZ color space.
     public var X: CGFloat {

@@ -6,28 +6,53 @@
 //  Copyright © 2020 BorisEmorine. All rights reserved.
 //
 
-import UIKit
+import AppKit
 
-extension UIImage {
+//public class MacGraphicsImageRendererFormat: NSObject {
+//    public var opaque: Bool = false
+//    public var prefersExtendedRange: Bool = false
+//    public var scale: CGFloat = 2.0
+//    public var bounds: CGRect = .zero
+//}
+
+extension NSImage {
     
     var resolution: CGSize {
-        return CGSize(width: size.width * scale, height: size.height * scale)
+        return CGSize(width: size.width * 1, height: size.height * 1)
     }
     
-    func resize(to targetSize: CGSize) -> UIImage {
+    func resize(to targetSize: CGSize) -> NSImage {
         guard targetSize != resolution else {
             return self
         }
-                
-        let format = UIGraphicsImageRendererFormat()
-        format.scale = 1
-        format.opaque = true
-        let renderer = UIGraphicsImageRenderer(size: targetSize, format: format)
-        let resizedImage = renderer.image { _ in
-            self.draw(in: CGRect(origin: CGPoint.zero, size: targetSize))
-        }
+
+        let newImage = NSImage(size: targetSize)
+        newImage.lockFocus()
         
-        return resizedImage
+        // Draw the image in the specified size
+        let context = NSGraphicsContext.current
+        context?.imageInterpolation = .high
+        self.draw(in: CGRect(origin: .zero, size: targetSize), from: CGRect(origin: .zero, size: self.size), operation: .copy, fraction: 1.0)
+        
+        newImage.unlockFocus()
+        
+        return newImage
     }
+    
+//    func resize(to targetSize: CGSize) -> NSImage {
+//        guard targetSize != resolution else {
+//            return self
+//        }
+//                
+//        let format = MacGraphicsImageRendererFormat()
+//        format.scale = 1
+//        format.opaque = true
+//        let renderer = UIGraphicsImageRenderer(size: targetSize, format: format)
+//        let resizedImage = renderer.image { _ in
+//            self.draw(in: CGRect(origin: CGPoint.zero, size: targetSize))
+//        }
+//        
+//        return resizedImage
+//    }
     
 }

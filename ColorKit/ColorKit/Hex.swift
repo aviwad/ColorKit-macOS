@@ -6,9 +6,9 @@
 //  Copyright © 2020 BorisEmorine. All rights reserved.
 //
 
-import UIKit
+import AppKit
 
-extension UIColor {
+extension NSColor {
     
     /// Convenience initializer with hexadecimal values.
     public convenience init?(hex: String) {

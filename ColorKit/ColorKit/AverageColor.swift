@@ -6,11 +6,11 @@
 //  Copyright © 2020 BorisEmorine. All rights reserved.
 //
 
-import UIKit
+import AppKit
 import CoreImage
 
 
-extension UIImage {
+extension NSImage {
     
     enum ImageColorError: Error {
         /// The `CIImage` instance could not be created.
@@ -40,8 +40,8 @@ extension UIImage {
     }
     
     /// Computes the average color of the image.
-    public func averageColor() throws -> UIColor {
-        guard let ciImage = CIImage(image: self) else {
+    public func averageColor() throws -> NSColor {
+        guard let data = self.tiffRepresentation, let ciImage = CIImage(data: data) else {
             throw ImageColorError.ciImageFailure
         }
         
@@ -61,7 +61,7 @@ extension UIImage {
         
         context.render(outputImage, toBitmap: &bitmap, rowBytes: 4, bounds: CGRect(x: 0, y: 0, width: 1, height: 1), format: CIFormat.RGBA8, colorSpace: CGColorSpaceCreateDeviceRGB())
 
-        let averageColor = UIColor(red: CGFloat(bitmap[0]) / 255.0, green: CGFloat(bitmap[1]) / 255.0, blue: CGFloat(bitmap[2]) / 255.0, alpha: CGFloat(bitmap[3]) / 255.0)
+        let averageColor = NSColor(red: CGFloat(bitmap[0]) / 255.0, green: CGFloat(bitmap[1]) / 255.0, blue: CGFloat(bitmap[2]) / 255.0, alpha: CGFloat(bitmap[3]) / 255.0)
         
         return averageColor
     }

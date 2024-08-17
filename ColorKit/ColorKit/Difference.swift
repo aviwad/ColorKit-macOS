@@ -6,9 +6,9 @@
 //  Copyright © 2020 BorisEmorine. All rights reserved.
 //
 
-import UIKit
+import AppKit
 
-extension UIColor {
+extension NSColor {
     
     public enum ColorDifferenceResult: Comparable {
         
@@ -58,7 +58,7 @@ extension UIColor {
             }
         }
         
-        public static func < (lhs: UIColor.ColorDifferenceResult, rhs: UIColor.ColorDifferenceResult) -> Bool {
+        public static func < (lhs: NSColor.ColorDifferenceResult, rhs: NSColor.ColorDifferenceResult) -> Bool {
             return lhs.associatedValue < rhs.associatedValue
         }
                 
@@ -88,7 +88,7 @@ extension UIColor {
     ///   - color: The color to compare this instance to.
     ///   - formula: The algorithm to use to make the comparaison.
     /// - Returns: The different between the passed in `UIColor` instance and this instance.
-    public func difference(from color: UIColor, using formula: DeltaEFormula = .CIE94) -> ColorDifferenceResult {
+    public func difference(from color: NSColor, using formula: DeltaEFormula = .CIE94) -> ColorDifferenceResult {
         switch formula {
         case .euclidean:
             let differenceValue = sqrt(pow(self.red255 - color.red255, 2) + pow(self.green255 - color.green255, 2) + pow(self.blue255 - color.blue255, 2))
@@ -99,7 +99,7 @@ extension UIColor {
             let roundedDifferenceValue = differenceValue.rounded(.toNearestOrEven, precision: 100)
             return ColorDifferenceResult(value: roundedDifferenceValue)
         case .CIE94:
-            let differenceValue = UIColor.deltaECIE94(lhs: self, rhs: color)
+            let differenceValue = NSColor.deltaECIE94(lhs: self, rhs: color)
             let roundedDifferenceValue = differenceValue.rounded(.toNearestOrEven, precision: 100)
             return ColorDifferenceResult(value: roundedDifferenceValue)
         default:
@@ -107,7 +107,7 @@ extension UIColor {
         }
     }
     
-    private static func deltaECIE94(lhs: UIColor, rhs: UIColor) -> CGFloat {
+    private static func deltaECIE94(lhs: NSColor, rhs: NSColor) -> CGFloat {
         let kL: CGFloat = 1.0
         let kC: CGFloat = 1.0
         let kH: CGFloat = 1.0

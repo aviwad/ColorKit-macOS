@@ -6,14 +6,14 @@
 //  Copyright © 2020 BorisEmorine. All rights reserved.
 //
 
-import UIKit
+import AppKit
 import CoreImage
 
 /// A simple structure containing a color, and a frequency.
 public class ColorFrequency: CustomStringConvertible {
     
-    /// A simple `UIColor` instance.
-    public let color: UIColor
+    /// A simple `NSColor` instance.
+    public let color: NSColor
     
     /// The frequency of the color.
     /// That is, how much it is present.
@@ -23,13 +23,13 @@ public class ColorFrequency: CustomStringConvertible {
         return "Color: \(color) - Frequency: \(frequency)"
     }
     
-    init(color: UIColor, count: CGFloat) {
+    init(color: NSColor, count: CGFloat) {
         self.frequency = count
         self.color = color
     }
 }
 
-extension UIImage {
+extension NSImage {
     
     public enum DominantColorAlgorithm {
         
@@ -100,11 +100,11 @@ extension UIImage {
     ///   - quality: The quality used to determine the dominant colors. A higher quality will yield more accurate results, but will be slower.
     ///   - algorithm: The algorithm used to determine the dominant colors. When using a k-means algorithm (`kMeansClustering`), a `CIKMeans` CIFilter isused. Unfortunately this filter doesn't work on the simulator.
     /// - Returns: The dominant colors as array of `UIColor` instances. When using the `.iterative` algorithm, this array is ordered where the first color is the most dominant one.
-    public func dominantColors(with quality: DominantColorQuality = .fair, algorithm: DominantColorAlgorithm = .iterative) throws -> [UIColor] {
+    public func dominantColors(with quality: DominantColorQuality = .fair, algorithm: DominantColorAlgorithm = .iterative) throws -> [NSColor] {
         switch algorithm {
         case .iterative:
             let dominantColorFrequencies = try self.dominantColorFrequencies(with: quality)
-            let dominantColors = dominantColorFrequencies.map { (colorFrequency) -> UIColor in
+            let dominantColors = dominantColorFrequencies.map { (colorFrequency) -> NSColor in
                 return colorFrequency.color
             }
             
@@ -130,7 +130,7 @@ extension UIImage {
         let targetSize = quality.targetSize(for: resolution)
         
         let resizedImage = resize(to: targetSize)
-        guard let cgImage = resizedImage.cgImage else {
+        guard let cgImage = resizedImage.cgImage(forProposedRect: nil, context: nil, hints: nil) else {
             throw ImageColorError.cgImageFailure
         }
         
@@ -178,7 +178,7 @@ extension UIImage {
             
             let rgb = rgb as! RGB
 
-            return ColorFrequency(color: UIColor(red: CGFloat(rgb.R) / 255.0, green: CGFloat(rgb.G) / 255.0, blue: CGFloat(rgb.B) / 255.0, alpha: 1.0), count: CGFloat(count))
+            return ColorFrequency(color: NSColor(red: CGFloat(rgb.R) / 255.0, green: CGFloat(rgb.G) / 255.0, blue: CGFloat(rgb.B) / 255.0, alpha: 1.0), count: CGFloat(count))
         }
         
         // ------
@@ -259,8 +259,8 @@ extension UIImage {
         return dominantColors
     }
     
-    private func kMeansClustering(with quality: DominantColorQuality) throws -> [UIColor] {
-        guard let ciImage = CIImage(image: self) else {
+    private func kMeansClustering(with quality: DominantColorQuality) throws -> [NSColor] {
+        guard let data = self.tiffRepresentation, let ciImage = CIImage(data: data) else {
             throw ImageColorError.ciImageFailure
         }
         let kMeansFilter = CIFilter(name: "CIKMeans")!
@@ -284,10 +284,10 @@ extension UIImage {
         
         context.render(outputImage, toBitmap: &bitmap, rowBytes: 4 * clusterCount, bounds: outputImage.extent, format: CIFormat.RGBA8, colorSpace: ciImage.colorSpace!)
         
-        var dominantColors = [UIColor]()
+        var dominantColors = [NSColor]()
 
         for i in 0..<clusterCount {
-            let color = UIColor(red: CGFloat(bitmap[i * 4 + 0]) / 255.0, green: CGFloat(bitmap[i * 4 + 1]) / 255.0, blue: CGFloat(bitmap[i * 4 + 2]) / 255.0, alpha: CGFloat(bitmap[i * 4 + 3]) / 255.0)
+            let color = NSColor(red: CGFloat(bitmap[i * 4 + 0]) / 255.0, green: CGFloat(bitmap[i * 4 + 1]) / 255.0, blue: CGFloat(bitmap[i * 4 + 2]) / 255.0, alpha: CGFloat(bitmap[i * 4 + 3]) / 255.0)
             dominantColors.append(color)
         }
         

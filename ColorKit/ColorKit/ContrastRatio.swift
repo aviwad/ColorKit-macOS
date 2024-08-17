@@ -6,9 +6,9 @@
 //  Copyright © 2020 BorisEmorine. All rights reserved.
 //
 
-import UIKit
+import AppKit
 
-extension UIColor {
+extension NSColor {
     
     /// An enumeration which groups contrast ratios based on their readability.
     /// This follows the  Web Content Accessibility Guidelines (WCAG) 2.0.
@@ -48,7 +48,7 @@ extension UIColor {
     
     /// Computes the contrast ratio between the current color instance, and the one passed in.
     /// Contrast ratios can range from 1 to 21 (commonly written 1:1 to 21:1).
-    public func contrastRatio(with color: UIColor) -> ContrastRatioResult {
+    public func contrastRatio(with color: NSColor) -> ContrastRatioResult {
         let l1 = max(color.relativeLuminance, relativeLuminance)
         let l2 = min(color.relativeLuminance, relativeLuminance)
 

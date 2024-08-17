@@ -6,9 +6,9 @@
 //  Copyright © 2020 BorisEmorine. All rights reserved.
 //
 
-import UIKit
+import AppKit
 
-extension UIColor {
+extension NSColor {
     
     /// The cyan (C) channel of the CMYK color space.
     public var cyan: CGFloat {
